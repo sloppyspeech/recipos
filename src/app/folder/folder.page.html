@@ -1,14 +1,15 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="npurple">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{ folder }}</ion-title>
+    <ion-title>Recipos</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <p style="font-size: 175px;padding-left: 150px;">R.</p>
+  <!-- <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">{{ folder }}</ion-title>
     </ion-toolbar>
@@ -18,4 +19,9 @@
     <strong class="capitalize">{{ folder }}</strong>
     <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
   </div>
+  <div>
+    <ion-input type="text" placeholder="Ingredient"></ion-input>
+    <ion-button shape="round" color="warning">Add</ion-button>
+  </div>
+  <ion-button (click)="getRecipeMaster()" expand="block" shape="round"color="primary">Recipe master</ion-button> -->
 </ion-content>
