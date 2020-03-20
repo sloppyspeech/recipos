@@ -20,7 +20,9 @@ export class DatabaseService {
   public $recipe_list = new BehaviorSubject([]);
   public $favRecipeList = new BehaviorSubject([]);
   public $ingListAutoComp = new BehaviorSubject([]);
+  public $recipeNameAutoComp = new BehaviorSubject([]);
   public ingredientList: any = [];
+  public recipeNameList: any = [];
   public loaderToShow: any;
   public isLoading = false;
 
@@ -181,7 +183,7 @@ export class DatabaseService {
     }
     // this.presentToast('Counting Recipes Done ');
 
-    sql = sql + '  order by recipe_name;'
+    sql = sql + '  order by recipe_name limit 100;'
     console.log(sql);
 
     return this.dbo.executeSql(sql, [])
@@ -209,6 +211,72 @@ export class DatabaseService {
       });
   }
 
+  getRecipesByName(recipeName: any) {
+    console.log('Inside getRecipesByName');
+    this.recipe_name_list = [];
+    let recipe_cnt = 0;
+    let input: string = '';
+    let re: string = '[^0-9A-Za-z]+'
+    let sql="select recipe_url,substr(recipe_name,1,1) asciiletr,recipe_total_time,"+
+            "recipe_name,'https://tarladalal.com/'||r.recipe_img_url recipe_img_url," +
+            "recipe_id,sum(1) over () total_recipes_cnt"+
+            "from recipe_master " +
+            " where recipe_name like '%"+recipeName+"%'";
+
+
+    // let sql = "with ingr_data as ( " +
+    //   "  select  distinct substr(recipe_name,1,1) letr ,r.recipe_total_time,r.recipe_name, r.recipe_url," +
+    //   "  'https://tarladalal.com/'||r.recipe_img_url recipe_img_url, r.recipe_id," +
+    //   "  group_concat(i.ingredient_name,',')  " +
+    //   "  over (partition by r.recipe_name ) con_ingr " +
+    //   "  from recipe_ingredients ri,ingredient_master i,recipe_master r " +
+    //   "  where ri.ingredient_id=i.ingredient_id " +
+    //   "  and ri.recipe_id=r.recipe_id  " +
+    //   ") " +
+    //   "  SELECT i.recipe_url,unicode(i.letr) asciiletr,i.recipe_total_time,i.recipe_name, "+
+    //   "  ifnull(f.recipe_id,0) fav_recipe,i.recipe_id , "+
+    //   "  i.recipe_img_url,sum(1) over () total_recipes_cnt " +
+    //   "  from ingr_data i left outer join favorites f"  +
+    //   "  on  i.recipe_id= f.recipe_id " +
+    //   "  where ";
+
+    // // this.presentToast('Counting Recipes ');
+    // for (let i = 0; i < ingredientList.length; i++) {
+    //   input.replace(re, "");
+    //   sql = sql + " i.con_ingr like  '%" + ingredientList[i] + "%'"
+    //   if (i + 1 != ingredientList.length) {
+    //     sql = sql + " and ";
+    //   }
+    // }
+    // this.presentToast('Counting Recipes Done ');
+
+    sql = sql + '  order by recipe_name limit 100;'
+    console.log(sql);
+
+    return this.dbo.executeSql(sql, [])
+      .then((res) => {
+        console.log('Executed SQL');
+        console.log(JSON.stringify(res.rows.length));
+        this.recipe_name_list=[];
+        for (var i = 0; i < res.rows.length; i++) {
+          // console.log("-------------------");
+          // console.log(res.rows.item(i));
+          this.recipe_name_list.push(res.rows.item(i));
+        }
+        if (res.rows.length == 0) {
+          this.recipe_name_list=[];
+            this.presentToast('No Recipes Found,please change search criteria');
+        }
+        else {
+          this.presentToast(res.rows.item(0).total_recipes_cnt + ' Recipes Found');
+        }
+        this.$recipe_list.next(this.recipe_name_list);
+
+      })
+      .catch((e) => {
+        console.log('Error while selecting from DB ' + JSON.stringify(e));
+      });
+  }
 
   getFavoriteRecipes() {
     console.log('Inside getFavoriteRecipes');
@@ -268,12 +336,12 @@ export class DatabaseService {
 
     let re: string = '[^0-9A-Za-z]+'
     let inp: string = ingrName.replace(re, "");
-    let ingrsql = " Select distinct ingredient_name from ingredient_master " +
+    let recipeNameSql = " Select distinct ingredient_name from ingredient_master " +
       " Where ingredient_name like '%" + ingrName + "%' LIMIT 7;";
 
-    console.log(ingrsql);
+    console.log(recipeNameSql);
 
-    return this.dbo.executeSql(ingrsql, [])
+    return this.dbo.executeSql(recipeNameSql, [])
       .then((res) => {
         console.log('Executed ingredientList SQL');
         console.log(JSON.stringify(res.rows.length));
@@ -289,6 +357,35 @@ export class DatabaseService {
       });
 
   }
+
+  getRecipeNameForAutoComp(recipeName: string) {
+    this.recipeNameList = [];
+    console.log("getRecipeNameForAutoComp " + recipeName);
+
+    let re: string = '[^0-9A-Za-z]+'
+    let inp: string = recipeName.replace(re, "");
+    let recipeNameSql = " Select distinct recipe_name,recipe_url from recipe_master " +
+      " Where recipe_name like '%" + recipeName + "%' LIMIT 12;";
+
+    console.log(recipeNameSql);
+
+    return this.dbo.executeSql(recipeNameSql, [])
+      .then((res) => {
+        console.log('Executed Recipe Name SQL');
+        console.log(JSON.stringify(res.rows.length));
+
+        for (let i = 0; i < res.rows.length; i++) {
+          console.log(res.rows.item(i));
+          this.recipeNameList.push(res.rows.item(i));
+        }
+        this.$recipeNameAutoComp.next(this.recipeNameList);
+      })
+      .catch((e) => {
+        console.log('Error while selecting Recipe Name from DB ' + JSON.stringify(e));
+      });
+
+  }
+
 
   getIngredientAsObservable(): Observable<any[]> {
     return this.$ingListAutoComp.asObservable()

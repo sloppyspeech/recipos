@@ -16,18 +16,18 @@ export class AppComponent implements OnInit {
       title: 'Search By Ingredients',
       url: 'recipes-by-ingredients',
       icon: 'mail'
+    } ,
+    {
+      title: 'Search By Name',
+      url: 'recipes-by-name',
+      icon: 'at'
     },
     {
       title: 'Favorites',
       url: 'favorite-recipes',
       icon: 'heart'
     }
-    // ,
-    // {
-    //   title: 'Search By Time To Cook',
-    //   url: 'recipes-tot-time',
-    //   icon: 'timer'
-    // }
+   
     // {
     //   title: 'Archived',
     //   url: '/folder/Archived',
