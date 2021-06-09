@@ -1,15 +1,35 @@
 <ion-app>
-  <ion-split-pane  color="npurple" contentId="main-content">
-    <ion-menu  color="npurple" contentId="main-content" type="overlay">
-      <ion-content color="npurple" >
-        <ion-list color="npurple" id="inbox-list" >
-          <ion-list-header >Recipos</ion-list-header>
-          <ion-note color="npurple" >Search Recipes By Different Filters</ion-note>
-
-          <ion-menu-toggle  auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" [class.selected]="selectedIndex == i">
-              <ion-icon  slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
-              <ion-label >{{ p.title }}</ion-label>
+  <ion-split-pane color="white" contentId="main-content">
+    <ion-menu color="white" contentId="main-content" type="overlay">
+      <ion-content color="white">
+        <ion-item-divider>
+          <ion-list>
+            <ion-label>
+              <h2 style="color: black; font-weight: bolder; font-size: 2rem">
+                Recipos
+              </h2>
+              <h3>Search recipes by different filters</h3>
+            </ion-label>
+          </ion-list>
+        </ion-item-divider>
+        <ion-list color="white" id="inbox-list">
+          <ion-menu-toggle
+            auto-hide="false"
+            *ngFor="let p of appPages; let i = index"
+          >
+            <ion-item
+              (click)="selectedIndex = i"
+              routerDirection="root"
+              [routerLink]="[p.url]"
+              lines="none"
+              detail="false"
+            >
+              <ion-icon
+                slot="start"
+                [ios]="p.icon + '-outline'"
+                [md]="p.icon + '-sharp'"
+              ></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>

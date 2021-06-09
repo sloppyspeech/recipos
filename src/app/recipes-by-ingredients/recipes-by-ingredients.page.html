@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="npurple">
+  <ion-toolbar color="white">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -10,9 +10,15 @@
   <form [formGroup]="fg_searchByIngredients">
     <ion-grid>
       <ion-row>
-        <ion-col >
+        <ion-col>
           <!-- <ion-input type="text" required="true" formControlName="fctl_ingredient_name" placeholder="Ingredient name"></ion-input> -->
-          <ion-searchbar type="search" formControlName="fctl_ingredient_name" animate="true" debounce="600" (ionChange)="getIngredientAutoComp($event)"></ion-searchbar>
+          <ion-searchbar
+            type="search"
+            formControlName="fctl_ingredient_name"
+            animate="true"
+            debounce="600"
+            (ionChange)="getIngredientAutoComp($event)"
+          ></ion-searchbar>
         </ion-col>
         <!-- <ion-col>
           <ion-button size="1" shape="round" [disabled]="disable_add_ingredient" color="success"
@@ -23,15 +29,26 @@
       <ion-row>
         <ion-col>
           <ion-list *ngIf="isItemAvailable">
-            <ion-item *ngFor="let item of ingrListAutoComp" (click)="itemSelected(item)">{{ item }}</ion-item>
-        </ion-list>
+            <ion-item
+              *ngFor="let item of ingrListAutoComp"
+              (click)="itemSelected(item)"
+              >{{ item }}</ion-item
+            >
+          </ion-list>
         </ion-col>
       </ion-row>
     </ion-grid>
-    <div>
-      <ion-chip (click)="removeIngredient(ingredient)" *ngFor="let ingredient of ingredient_list">
+    <div style="margin-left: 1rem">
+      <ion-chip
+        color="dark"
+        outline="true"
+        *ngFor="let ingredient of ingredient_list"
+      >
         <ion-label>{{ingredient}}</ion-label>
-        <ion-icon name="close"></ion-icon>
+        <ion-icon
+          name="close"
+          (click)="removeIngredient(ingredient)"
+        ></ion-icon>
       </ion-chip>
     </div>
 
@@ -39,11 +56,17 @@
       Search Recipes
     </ion-button> -->
   </form>
-  <ion-fab *ngIf="recipe_list?.length > 0" horizontal="end" vertical="top" slot="fixed" edge>
+  <ion-fab
+    *ngIf="recipe_list?.length > 0"
+    horizontal="end"
+    vertical="top"
+    slot="fixed"
+    edge
+  >
     <ion-fab-button>
       <ion-icon name="bulb"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list >
+    <ion-fab-list>
       <ion-fab-button color="light" (click)="setRecipeListItemBegnChars('A-G')">
         A-G
       </ion-fab-button>
@@ -60,45 +83,75 @@
         ALL
       </ion-fab-button>
     </ion-fab-list>
-
   </ion-fab>
 
-  <ion-fab *ngIf="recipe_list?.length > 0"  horizontal="end" vertical="bottom" slot="fixed" >
+  <ion-fab
+    *ngIf="recipe_list?.length > 0"
+    horizontal="end"
+    vertical="bottom"
+    slot="fixed"
+  >
     <ion-fab-button color="secondary">
-      <ion-icon  name="alarm"></ion-icon>
+      <ion-icon name="alarm"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
       <ion-fab-button color="light" (click)="setRecipeListByTotTime('15')">
-        15<br>mins
+        15<br />mins
       </ion-fab-button>
       <ion-fab-button color="light" (click)="setRecipeListByTotTime('30')">
-        30<br>mins
+        30<br />mins
       </ion-fab-button>
       <ion-fab-button color="light" (click)="setRecipeListByTotTime('1hr')">
-        1<br>hr
+        1<br />hr
       </ion-fab-button>
       <ion-fab-button color="light" (click)="setRecipeListByTotTime('2hr')">
-        2<br>hr
+        2<br />hr
       </ion-fab-button>
       <ion-fab-button color="light" (click)="setRecipeListByTotTime('ALL')">
         ALL
       </ion-fab-button>
     </ion-fab-list>
-
   </ion-fab>
 
   <ion-list *ngFor="let recipe of recipe_list">
-     <ion-item >
+    <ion-item>
       <ion-thumbnail slot="start">
-        <img [src]='recipe.recipe_img_url'>
+        <img [src]="recipe.recipe_img_url" />
       </ion-thumbnail>
-      <ion-label>{{recipe.recipe_name}}
-        <ion-icon *ngIf="recipe.fav_recipe!=0" (click)="removeFromFavorites(recipe.recipe_id)" name="heart" color="danger" ></ion-icon>
-        <ion-icon *ngIf="recipe.fav_recipe==0"  (click)="addToFavorites(recipe.recipe_id)" name="heart-outline" color="primary" ></ion-icon>
-      <br><ion-note>{{recipe.recipe_total_time}} mins</ion-note>
-      <ion-chip (click)="openInBrowser(recipe.recipe_url)">Open</ion-chip>
+      <ion-label style="font-weight: bolder"
+        >{{recipe.recipe_name}}
+        <ion-icon
+          *ngIf="recipe.fav_recipe!=0"
+          (click)="removeFromFavorites(recipe.recipe_id)"
+          name="heart"
+          color="danger"
+          style="margin-left: 0.5rem; margin-top: 0.25rem"
+        ></ion-icon>
+        <ion-icon
+          *ngIf="recipe.fav_recipe==0"
+          (click)="addToFavorites(recipe.recipe_id)"
+          name="heart-outline"
+          color="primary"
+          style="margin-left: 0.5rem; margin-top: 0.25rem"
+        ></ion-icon>
+        <br /><ion-note style="font-weight: lighter"
+          >{{recipe.recipe_total_time}} mins</ion-note
+        >
+        <!-- <ion-chip
+          color="primary"
+          outline="true"
+          (click)="openInBrowser(recipe.recipe_url)"
+        >
+          <ion-icon name="open" color="primary"></ion-icon>
+          <ion-label>Open</ion-label>
+        </ion-chip> -->
+        <ion-icon
+          name="open"
+          color="medium"
+          (click)="openInBrowser(recipe.recipe_url)"
+          style="padding-left: 0.5rem; margin-top: 0.5rem"
+        ></ion-icon>
       </ion-label>
-    </ion-item> 
+    </ion-item>
   </ion-list>
-  
 </ion-content>

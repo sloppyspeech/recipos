@@ -15,34 +15,19 @@ export class AppComponent implements OnInit {
     {
       title: 'Search By Ingredients',
       url: 'recipes-by-ingredients',
-      icon: 'mail'
-    } ,
+      icon: 'leaf'
+    },
     {
       title: 'Search By Name',
       url: 'recipes-by-name',
-      icon: 'at'
+      icon: 'restaurant'
     },
     {
       title: 'Favorites',
       url: 'favorite-recipes',
       icon: 'heart'
     }
-   
-    // {
-    //   title: 'Archived',
-    //   url: '/folder/Archived',
-    //   icon: 'archive'
-    // },
-    // {
-    //   title: 'Trash',
-    //   url: '/folder/Trash',
-    //   icon: 'trash'
-    // },
-    // {
-    //   title: 'Spam',
-    //   url: '/folder/Spam',
-    //   icon: 'warning'
-    // }
+
   ];
   // public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
   public labels = [];
